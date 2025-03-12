@@ -28,6 +28,11 @@
         document.addEventListener("DOMContentLoaded", function() {
             console.log("🔄 Inițializare Blockly...");
 
+            if (typeof Blockly === "undefined") {
+                console.error("❌ Eroare: Blockly nu a fost încărcat corect!");
+                return;
+            }
+
             // 📌 Define custom blocks
             Blockly.Blocks['move_forward'] = {
                 init: function() {
@@ -87,15 +92,25 @@
                 if (window.flutter_inappwebview) {
                     window.flutter_inappwebview.callHandler("BlocklyChannel", command);
                 } else {
-                    console.log("📡 Sent command: " + command);
+                    console.warn("⚠️ WebView nu este disponibil, comanda ignorată:", command);
                 }
             }
 
             // 📌 Generate and run code when button is clicked
             window.runProgram = function() {
-                var code = Blockly.JavaScript.workspaceToCode(workspace);
-                console.log("📤 Cod generat:\n" + code);
-                eval(code);
+                try {
+                    var code = Blockly.JavaScript.workspaceToCode(workspace);
+                    console.log("📤 Cod generat:\n" + code);
+
+                    // Rulează comenzile doar dacă WebView este disponibil
+                    if (window.flutter_inappwebview) {
+                        eval(code);
+                    } else {
+                        console.warn("⚠️ WebView nu este disponibil, codul generat nu a fost executat.");
+                    }
+                } catch (error) {
+                    console.error("❌ Eroare la generarea/rularea codului:", error);
+                }
             };
         });
     </script>
