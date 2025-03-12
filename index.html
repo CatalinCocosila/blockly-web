@@ -25,10 +25,10 @@
     </xml>
 
     <script>
-        // Definim funcția globală sendCommand pentru comunicarea cu Flutter
+        // ✅ Funcție globală pentru trimiterea comenzilor către Flutter WebView
         window.sendCommand = function(command) {
-            if (window.flutter_inappwebview) {
-                window.flutter_inappwebview.callHandler("BlocklyChannel", command);
+            if (window.BlocBlocklyChannel) {
+                window.BlocBlocklyChannel.postMessage(command);
                 console.log("📡 [JS] Comandă trimisă către Flutter: " + command);
             } else {
                 console.log("⚠️ [JS] WebView nu este integrat cu Flutter. Comandă: " + command);
@@ -38,7 +38,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             console.log("🔄 Inițializare Blockly...");
 
-            // 📌 Definirea blocurilor personalizate
+            // ✅ Definirea blocurilor personalizate
             Blockly.Blocks['move_forward'] = {
                 init: function() {
                     this.appendDummyInput().appendField("Mergi înainte");
@@ -87,11 +87,11 @@
                 return 'window.sendCommand("RIGHT");\n';
             };
 
-            // 📌 Inițializare Blockly
+            // ✅ Inițializare Blockly
             var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
             console.log("✅ Blockly inițializat!");
 
-            // 📌 Generare și execuție cod la apăsarea butonului
+            // ✅ Generare și execuție cod la apăsarea butonului
             window.runProgram = function() {
                 var code = Blockly.JavaScript.workspaceToCode(workspace);
                 console.log("📤 [JS] Cod generat:\n" + code);
