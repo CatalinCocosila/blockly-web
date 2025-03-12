@@ -25,6 +25,8 @@
     </xml>
 
     <script>
+        let commandQueue = []; // 📌 Coada pentru execuție linie cu linie
+
         document.addEventListener("DOMContentLoaded", function() {
             console.log("🔄 Inițializare Blockly...");
 
@@ -33,7 +35,7 @@
                 return;
             }
 
-            // 📌 Define custom blocks
+            // 📌 Definește blocurile personalizate
             Blockly.Blocks['move_forward'] = {
                 init: function() {
                     this.appendDummyInput().appendField("Mergi înainte");
@@ -43,7 +45,7 @@
                 }
             };
             Blockly.JavaScript.forBlock['move_forward'] = function(block, generator) {
-                return 'sendCommand("UP");\n';
+                return 'queueCommand("UP");\n';
             };
 
             Blockly.Blocks['move_backward'] = {
@@ -55,7 +57,7 @@
                 }
             };
             Blockly.JavaScript.forBlock['move_backward'] = function(block, generator) {
-                return 'sendCommand("DOWN");\n';
+                return 'queueCommand("DOWN");\n';
             };
 
             Blockly.Blocks['turn_left'] = {
@@ -67,7 +69,7 @@
                 }
             };
             Blockly.JavaScript.forBlock['turn_left'] = function(block, generator) {
-                return 'sendCommand("LEFT");\n';
+                return 'queueCommand("LEFT");\n';
             };
 
             Blockly.Blocks['turn_right'] = {
@@ -79,38 +81,59 @@
                 }
             };
             Blockly.JavaScript.forBlock['turn_right'] = function(block, generator) {
-                return 'sendCommand("RIGHT");\n';
+                return 'queueCommand("RIGHT");\n';
             };
 
-            // 📌 Initialize Blockly after defining blocks
+            // 📌 Inițializează Blockly după definirea blocurilor
             var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
 
             console.log("✅ Blockly inițializat!");
 
-            // 📌 Function to send commands to Flutter WebView
+            // 📌 Adaugă comenzile în coadă
+            function queueCommand(command) {
+                commandQueue.push(command);
+            }
+
+            // 📌 Funcție pentru trimiterea comenzilor către Flutter WebView
             function sendCommand(command) {
                 if (window.flutter_inappwebview) {
                     window.flutter_inappwebview.callHandler("BlocklyChannel", command);
+                    console.log("📡 Trimite comanda către Flutter: " + command);
                 } else {
-                    console.warn("⚠️ WebView nu este disponibil, comanda ignorată:", command);
+                    console.warn("⚠️ WebView nu este disponibil, comanda '" + command + "' a fost salvată în coadă.");
                 }
             }
 
-            // 📌 Generate and run code when button is clicked
+            // 📌 Execută comenzile linie cu linie cu pauză între ele
+            function executeCommands() {
+                if (commandQueue.length === 0) {
+                    console.log("✅ Toate comenzile au fost executate.");
+                    return;
+                }
+
+                let command = commandQueue.shift();
+                console.log("🚀 Execut comanda: " + command);
+                sendCommand(command);
+
+                setTimeout(executeCommands, 500); // Pauză de 500ms între comenzi
+            }
+
+            // 📌 Buton pentru rularea programului
             window.runProgram = function() {
                 try {
+                    commandQueue = []; // Golește coada înainte de rulare
                     var code = Blockly.JavaScript.workspaceToCode(workspace);
                     console.log("📤 Cod generat:\n" + code);
-
-                    // Rulează comenzile doar dacă WebView este disponibil
-                    if (window.flutter_inappwebview) {
-                        eval(code);
-                    } else {
-                        console.warn("⚠️ WebView nu este disponibil, codul generat nu a fost executat.");
-                    }
+                    eval(code); // Adaugă comenzile în coadă
+                    executeCommands(); // Rulează comenzile treptat
                 } catch (error) {
                     console.error("❌ Eroare la generarea/rularea codului:", error);
                 }
+            };
+
+            // 📌 Funcție pentru preluarea comenzilor în Flutter
+            window.getCommandLog = function() {
+                return JSON.stringify(commandQueue);
             };
         });
     </script>
