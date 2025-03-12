@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockly Robot Controller</title>
+
+    <!-- Load Blockly core -->
+    <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/msg/en.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Controlează Robotul</h2>
+    <div id="blocklyDiv" style="height: 500px; width: 100%;"></div>
+
+    <xml id="toolbox" style="display: none">
+        <block type="move_forward"></block>
+        <block type="move_backward"></block>
+        <block type="turn_left"></block>
+        <block type="turn_right"></block>
+    </xml>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("🔄 Inițializare Blockly...");
+
+            // 📌 Define custom blocks
+            Blockly.Blocks['move_forward'] = {
+                init: function() {
+                    this.appendDummyInput().appendField("Mergi înainte");
+                    this.setPreviousStatement(true);
+                    this.setNextStatement(true);
+                    this.setColour(230);
+                }
+            };
+            Blockly.JavaScript.forBlock['move_forward'] = function(block, generator) {
+                return 'sendCommand("UP");\n';
+            };
+
+            Blockly.Blocks['move_backward'] = {
+                init: function() {
+                    this.appendDummyInput().appendField("Mergi înapoi");
+                    this.setPreviousStatement(true);
+                    this.setNextStatement(true);
+                    this.setColour(230);
+                }
+            };
+            Blockly.JavaScript.forBlock['move_backward'] = function(block, generator) {
+                return 'sendCommand("DOWN");\n';
+            };
+
+            Blockly.Blocks['turn_left'] = {
+                init: function() {
+                    this.appendDummyInput().appendField("Rotire stânga");
+                    this.setPreviousStatement(true);
+                    this.setNextStatement(true);
+                    this.setColour(230);
+                }
+            };
+            Blockly.JavaScript.forBlock['turn_left'] = function(block, generator) {
+                return 'sendCommand("LEFT");\n';
+            };
+
+            Blockly.Blocks['turn_right'] = {
+                init: function() {
+                    this.appendDummyInput().appendField("Rotire dreapta");
+                    this.setPreviousStatement(true);
+                    this.setNextStatement(true);
+                    this.setColour(230);
+                }
+            };
+            Blockly.JavaScript.forBlock['turn_right'] = function(block, generator) {
+                return 'sendCommand("RIGHT");\n';
+            };
+
+            // 📌 Initialize Blockly after defining blocks
+            var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
+
+            console.log("✅ Blockly inițializat!");
+
+            // 📌 Function to send commands to Flutter WebView
+            function sendCommand(command) {
+                if (window.flutter_inappwebview) {
+                    window.flutter_inappwebview.callHandler("BlocklyChannel", command);
+                } else {
+                    console.log("📡 Sent command: " + command);
+                }
+            }
+
+            // 📌 Generate and run code when button is clicked
+            window.runProgram = function() {
+                var code = Blockly.JavaScript.workspaceToCode(workspace);
+                console.log("📤 Cod generat:\n" + code);
+                eval(code);
+            };
+        });
+    </script>
+
+    <button onclick="runProgram()">Start Program</button>
+</body>
+</html>
