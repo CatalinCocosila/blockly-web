@@ -10,11 +10,20 @@
     <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
     <script src="https://unpkg.com/blockly/msg/en.js"></script>
     <script src="blockly.js" defer></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body class="bg-gray-200 flex flex-col items-center justify-center min-h-screen p-4">
-    <div class="w-[100vw] max-w-4xl bg-white ">
-        <div id="blocklyDiv" class="h-[100vh] border border-gray-300 rounded-lg shadow-lg "></div>
-        <div class="flex justify-center mt-4">
+<body class="bg-gray-200 flex flex-col items-center justify-center w-screen h-screen">
+    <div class="w-full h-full flex flex-col items-center justify-center">
+        <div id="blocklyDiv" class="w-full h-full border border-gray-300 rounded-lg shadow-lg"></div>
+        <div class="absolute bottom-4 w-full flex justify-center">
             <button onclick="runProgram()" class="bg-green-500 text-white px-6 py-3 text-lg rounded-lg flex items-center gap-2 hover:bg-green-700">
                 🚀 Start Program
             </button>
