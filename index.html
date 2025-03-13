@@ -17,37 +17,41 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            touch-action: none; /* Previne gesturi de scroll web */
-            user-select: none; /* Previne selectarea textului */
-            overscroll-behavior: none; /* Elimină bounce-ul */
+            touch-action: none;
+            overscroll-behavior: none; 
         }
 
         #blocklyDiv {
-            width: 100%;
-            height: 100%;
+            width:  100%;
+            height: 93%;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top:0;
         }
-
         .fixed-bottom-button {
     position: absolute;
-    bottom: 0; /* Fixează butonul în partea de jos */
+    bottom: 0; 
     left: 50%;
     transform: translateX(-50%);
-    width: 100%; /* Opțional: Dacă vrei să ocupe toată lățimea */
+    width: 100%; 
+    height: 7%; 
     background-color: #4CAF50;
     color: white;
-    padding: 15px 0;
     font-size: 18px;
     border: none;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    z-index: 1000; /* Se asigură că este deasupra Blockly */
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    padding: 2% 0; 
+    z-index: 1000; 
 }
+
 
     </style>
 </head>
