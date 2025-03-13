@@ -1,9 +1,6 @@
 window.sendCommand = function(command) {
     if (window.BlocBlocklyChannel) {
         window.BlocBlocklyChannel.postMessage(command);
-        console.log(" Comandă trimisă către Flutter: " + command);
-    } else {
-        console.log("WebView nu este integrat cu Flutter. Comandă: " + command);
     }
 };
 
