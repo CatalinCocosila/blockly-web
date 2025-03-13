@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     Blockly.Blocks['move_forward'] = {
         init: function() {
-            this.appendDummyInput().appendField("Mergi înainte");
+            this.appendDummyInput().appendField("🔼Mergi înainte");
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setColour(230);
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     Blockly.Blocks['move_backward'] = {
         init: function() {
-            this.appendDummyInput().appendField("Mergi înapoi");
+            this.appendDummyInput().appendField("🔽Mergi înapoi");
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setColour(230);
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     Blockly.Blocks['turn_left'] = {
         init: function() {
-            this.appendDummyInput().appendField("Rotire stânga");
+            this.appendDummyInput().appendField("⬅Rotire stânga");
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setColour(230);
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     Blockly.Blocks['turn_right'] = {
         init: function() {
-            this.appendDummyInput().appendField("Rotire dreapta");
+            this.appendDummyInput().appendField("➡Rotire dreapta");
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setColour(230);
