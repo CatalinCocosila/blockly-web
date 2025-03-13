@@ -1,9 +1,9 @@
 window.sendCommand = function(command) {
     if (window.BlocBlocklyChannel) {
         window.BlocBlocklyChannel.postMessage(command);
-        console.log("📡 [JS] Comandă trimisă către Flutter: " + command);
+        console.log(" Comandă trimisă către Flutter: " + command);
     } else {
-        console.log("⚠️ [JS] WebView nu este integrat cu Flutter. Comandă: " + command);
+        console.log("WebView nu este integrat cu Flutter. Comandă: " + command);
     }
 };
 
@@ -59,15 +59,15 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
-    console.log("✅ Blockly inițializat!");
+    console.log(" Blockly merge");
     
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log("📤 [JS] Cod generat:\n" + code);
+        console.log("Cod:\n" + code);
         try {
             eval(code);
         } catch (error) {
-            console.error("❌ [JS] Eroare la execuția codului Blockly:", error);
+            console.error("Eroare la Blockly:", error);
         }
     };
 });
