@@ -1,3 +1,9 @@
+window.sendCommand = function(command) {
+    if (window.BlocBlocklyChannel) {
+        window.BlocBlocklyChannel.postMessage(command);
+    } 
+};
+
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔄 Inițializare Blockly...");
 
