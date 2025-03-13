@@ -1,12 +1,3 @@
-window.sendCommand = function(command) {
-    if (window.BlocBlocklyChannel) {
-        window.BlocBlocklyChannel.postMessage(command);
-        console.log(" Comandă trimisă către Flutter: " + command);
-    } else {
-        console.log("WebView nu este integrat cu Flutter. Comandă: " + command);
-    }
-};
-
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔄 Inițializare Blockly...");
     
@@ -64,10 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log("Cod:\n" + code);
-        try {
-            eval(code);
-        } catch (error) {
-            console.error("Eroare la Blockly:", error);
-        }
+       
     };
 });
