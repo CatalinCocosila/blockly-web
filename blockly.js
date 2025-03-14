@@ -92,10 +92,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     Blockly.JavaScript.forBlock['repeat_n'] = function(block) {
         var count = block.getFieldValue("COUNT");
-        var statements = Blockly.JavaScript.statementToCode(block, 'DO');
+        var statements = Blockly.JavaScript.statementToCode(block, 'DO')
+            .split("\n")
+            .map(cmd => cmd.trim())
+            .filter(cmd => cmd !== "")
+            .map(cmd => `// ${cmd}`) 
+            .join("\n");
 
-        return `for (let i = 0; i < ${count}; i++) {\n${statements}}\n`;
+        return `// for (let i = 0; i < ${count}; i++) {\n${statements}\n// }\n`;
     };
+    
 
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
     console.log("Blockly este activ!");
