@@ -7,7 +7,6 @@ window.sendCommand = function(command) {
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔄 Inițializare Blockly...");
 
-    // 📌 Bloc "on_start" care permite execuția codului doar când este utilizat
     Blockly.Blocks['on_start'] = {
         init: function() {
             this.appendDummyInput()
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return `window.runCommands = function() {\n${statements}};\n`;
     };
 
-    // 📌 Blocuri de mișcare (acestea trebuie plasate în `on_start`)
     Blockly.Blocks['move_forward'] = {
         init: function() {
             this.appendDummyInput().appendField("Mergi înainte");
@@ -72,11 +70,9 @@ document.addEventListener("DOMContentLoaded", function() {
         return 'window.sendCommand("RIGHT");\n';
     };
 
-    // 📌 Inițializare Blockly
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
     console.log("✅ Blockly este activ!");
 
-    // 📌 Buton de rulare program (execută doar dacă există `on_start`)
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log("📤 Cod generat:\n" + code);
@@ -84,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (code.includes("window.runCommands")) {
             try {
                 eval(code);
-                window.runCommands();
+                window.runCommands(); // Rulează doar comenzile din `on_start`
             } catch (error) {
                 console.error("❌ Eroare la execuție:", error);
             }
