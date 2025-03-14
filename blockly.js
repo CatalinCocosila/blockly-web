@@ -98,12 +98,28 @@ document.addEventListener("DOMContentLoaded", function() {
             .filter(cmd => cmd !== "")
             .join("\n");
     
-        if (block.getSurroundParent() && block.getSurroundParent().type === 'on_start') {
+        let parent = block.getSurroundParent();
+        let isInsideOnStart = false;
+        let isInsideRepeat = false;
+    
+        while (parent) {
+            if (parent.type === 'on_start') {
+                isInsideOnStart = true;
+                break;
+            }
+            if (parent.type === 'repeat_n') {
+                isInsideRepeat = true;
+            }
+            parent = parent.getSurroundParent();
+        }
+    
+        if (isInsideOnStart || isInsideRepeat) {
             return `for (let i = 0; i < ${count}; i++) {\n${statements}\n}\n`;
         } else {
             return `// for (let i = 0; i < ${count}; i++) {\n${statements.split("\n").map(line => "// " + line).join("\n")}\n// }\n`;
         }
     };
+    
     
 
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
@@ -111,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log("📤 Cod generat:\n" + code);
+        console.log("Cod generat:\n" + code);
 
         if (code.includes("window.runCommands")) {
             try {
