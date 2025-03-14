@@ -7,7 +7,6 @@ window.sendCommand = function(command) {
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔄 Inițializare Blockly...");
 
-    // 📌 Bloc "on_start" - toate comenzile trebuie să fie în acest bloc
     Blockly.Blocks['on_start'] = {
         init: function() {
             this.appendDummyInput()
@@ -20,14 +19,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     Blockly.JavaScript.forBlock['on_start'] = function(block) {
         var statements = Blockly.JavaScript.statementToCode(block, 'DO');
-        
-        // 🚀 Aici adăugăm `window.sendCommand()` pentru fiecare comandă
-        var commands = statements.split(",\n").map(cmd => `window.sendCommand(${cmd.trim()});`).join("\n");
-        
+
+        var commands = statements.split(",\n").filter(cmd => cmd.trim() !== "").map(cmd => `window.sendCommand(${cmd.trim()});`).join("\n");
+
         return `window.runCommands = function() {\n${commands}\n};\n`;
     };
 
-    // 📌 Blocuri de mișcare - Acum returnează doar textul direcției
     Blockly.Blocks['move_forward'] = {
         init: function() {
             this.appendDummyInput().appendField("Mergi înainte");
@@ -76,20 +73,17 @@ document.addEventListener("DOMContentLoaded", function() {
         return '"RIGHT",\n';
     };
 
-    // 📌 Inițializare Blockly
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
-    console.log("✅ Blockly este activ!");
+    console.log("Blockly este activ!");
 
-    // 📌 Buton de rulare program (execută doar codul din `on_start`)
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log("📤 Cod generat:\n" + code);
 
-        // 🛑 Caută `window.runCommands` în codul generat
         if (code.includes("window.runCommands")) {
             try {
                 eval(code);
-                window.runCommands(); // Rulează doar comenzile din `on_start`
+                window.runCommands();
             } catch (error) {
                 console.error("❌ Eroare la execuție:", error);
             }
