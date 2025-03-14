@@ -5,7 +5,7 @@ window.sendCommand = function(command) {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("Inițializare Blockly...");
+    console.log("🔄 Inițializare Blockly...");
 
     Blockly.Blocks['on_start'] = {
         init: function() {
@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function() {
         var commands = statements.split("\n")
             .map(cmd => cmd.replace("// ", "").trim())
             .filter(cmd => cmd !== "")
-            .map(cmd => `window.sendCommand(${cmd});`)
             .join("\n");
 
         return `window.runCommands = function() {\n${commands}\n};\n`;
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_forward'] = function(block) {
-        return '// "UP"\n';
+        return 'window.sendCommand("UP");\n';
     };
 
     Blockly.Blocks['move_backward'] = {
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_backward'] = function(block) {
-        return '// "DOWN"\n';
+        return 'window.sendCommand("DOWN");\n';
     };
 
     Blockly.Blocks['turn_left'] = {
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_left'] = function(block) {
-        return '// "LEFT"\n';
+        return 'window.sendCommand("LEFT");\n';
     };
 
     Blockly.Blocks['turn_right'] = {
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_right'] = function(block) {
-        return '// "RIGHT"\n';
+        return 'window.sendCommand("RIGHT");\n';
     };
 
     Blockly.Blocks['repeat_n'] = {
@@ -103,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log(" Cod generat:\n" + code);
+        console.log("📤 Cod generat:\n" + code);
 
         if (code.includes("window.runCommands")) {
             try {
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error("Eroare la execuție:", error);
             }
         } else {
-            console.warn(" Nu există un bloc 'on start'. Comenzile nu vor fi executate!");
+            console.warn("Nu există un bloc 'on start'. Comenzile nu vor fi executate!");
         }
     };
 });
