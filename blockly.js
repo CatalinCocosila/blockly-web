@@ -5,7 +5,7 @@ window.sendCommand = function(command) {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("🔄 Inițializare Blockly...");
+    console.log("Inițializare Blockly...");
 
     Blockly.Blocks['on_start'] = {
         init: function() {
@@ -20,7 +20,11 @@ document.addEventListener("DOMContentLoaded", function() {
     Blockly.JavaScript.forBlock['on_start'] = function(block) {
         var statements = Blockly.JavaScript.statementToCode(block, 'DO');
 
-        var commands = statements.split("\n").map(cmd => cmd.replace("// ", "").trim()).filter(cmd => cmd !== "").map(cmd => `window.sendCommand(${cmd});`).join("\n");
+        var commands = statements.split("\n")
+            .map(cmd => cmd.replace("// ", "").trim())
+            .filter(cmd => cmd !== "")
+            .map(cmd => `window.sendCommand(${cmd});`)
+            .join("\n");
 
         return `window.runCommands = function() {\n${commands}\n};\n`;
     };
@@ -73,22 +77,43 @@ document.addEventListener("DOMContentLoaded", function() {
         return '// "RIGHT"\n';
     };
 
+    Blockly.Blocks['repeat_n'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Repeta de")
+                .appendField(new Blockly.FieldNumber(2, 1), "COUNT")
+                .appendField("ori");
+            this.appendStatementInput("DO")
+                .setCheck(null);
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+            this.setColour(180);
+        }
+    };
+
+    Blockly.JavaScript.forBlock['repeat_n'] = function(block) {
+        var count = block.getFieldValue("COUNT");
+        var statements = Blockly.JavaScript.statementToCode(block, 'DO');
+
+        return `for (let i = 0; i < ${count}; i++) {\n${statements}}\n`;
+    };
+
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
-    console.log("✅ Blockly este activ!");
+    console.log("Blockly este activ!");
 
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-        console.log("📤 Cod generat:\n" + code);
+        console.log(" Cod generat:\n" + code);
 
         if (code.includes("window.runCommands")) {
             try {
                 eval(code);
                 window.runCommands();
             } catch (error) {
-                console.error("❌ Eroare la execuție:", error);
+                console.error("Eroare la execuție:", error);
             }
         } else {
-            console.warn("⚠️ Nu există un bloc 'on start'. Comenzile nu vor fi executate!");
+            console.warn(" Nu există un bloc 'on start'. Comenzile nu vor fi executate!");
         }
     };
 });
