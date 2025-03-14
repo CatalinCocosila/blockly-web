@@ -7,6 +7,7 @@ window.sendCommand = function(command) {
 document.addEventListener("DOMContentLoaded", function() {
     console.log("🔄 Inițializare Blockly...");
 
+    // 📌 Bloc "on_start" - toate comenzile trebuie să fie în acest bloc
     Blockly.Blocks['on_start'] = {
         init: function() {
             this.appendDummyInput()
@@ -19,9 +20,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     Blockly.JavaScript.forBlock['on_start'] = function(block) {
         var statements = Blockly.JavaScript.statementToCode(block, 'DO');
-        return `window.runCommands = function() {\n${statements}};\n`;
+        
+        // 🚀 Aici adăugăm `window.sendCommand()` pentru fiecare comandă
+        var commands = statements.split(",\n").map(cmd => `window.sendCommand(${cmd.trim()});`).join("\n");
+        
+        return `window.runCommands = function() {\n${commands}\n};\n`;
     };
 
+    // 📌 Blocuri de mișcare - Acum returnează doar textul direcției
     Blockly.Blocks['move_forward'] = {
         init: function() {
             this.appendDummyInput().appendField("Mergi înainte");
@@ -31,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_forward'] = function(block) {
-        return 'window.sendCommand("UP");\n';
+        return '"UP",\n';
     };
 
     Blockly.Blocks['move_backward'] = {
@@ -43,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_backward'] = function(block) {
-        return 'window.sendCommand("DOWN");\n';
+        return '"DOWN",\n';
     };
 
     Blockly.Blocks['turn_left'] = {
@@ -55,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_left'] = function(block) {
-        return 'window.sendCommand("LEFT");\n';
+        return '"LEFT",\n';
     };
 
     Blockly.Blocks['turn_right'] = {
@@ -67,16 +73,19 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_right'] = function(block) {
-        return 'window.sendCommand("RIGHT");\n';
+        return '"RIGHT",\n';
     };
 
+    // 📌 Inițializare Blockly
     var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
     console.log("✅ Blockly este activ!");
 
+    // 📌 Buton de rulare program (execută doar codul din `on_start`)
     window.runProgram = function() {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
         console.log("📤 Cod generat:\n" + code);
 
+        // 🛑 Caută `window.runCommands` în codul generat
         if (code.includes("window.runCommands")) {
             try {
                 eval(code);
