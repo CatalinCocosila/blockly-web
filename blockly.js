@@ -96,10 +96,13 @@ document.addEventListener("DOMContentLoaded", function() {
             .split("\n")
             .map(cmd => cmd.trim())
             .filter(cmd => cmd !== "")
-            .map(cmd => `// ${cmd}`) 
             .join("\n");
-
-        return `// for (let i = 0; i < ${count}; i++) {\n${statements}\n// }\n`;
+    
+        if (block.getSurroundParent() && block.getSurroundParent().type === 'on_start') {
+            return `for (let i = 0; i < ${count}; i++) {\n${statements}\n}\n`;
+        } else {
+            return `// for (let i = 0; i < ${count}; i++) {\n${statements.split("\n").map(line => "// " + line).join("\n")}\n// }\n`;
+        }
     };
     
 
