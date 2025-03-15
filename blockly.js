@@ -5,12 +5,12 @@ window.sendCommand = function(command) {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("🔄 Inițializare Blockly...");
+    console.log("Initializare");
 
     Blockly.Blocks['on_start'] = {
         init: function() {
             this.appendDummyInput()
-                .appendField("on start");
+                .appendField("Când apeși pe 🚀");
             this.appendStatementInput("DO")
                 .setCheck(null);
             this.setColour(120);
@@ -122,7 +122,17 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
 
-    var workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
+    var workspace = Blockly.inject('blocklyDiv', {
+    toolbox: document.getElementById('toolbox'),
+    renderer: 'zelos',
+    zoom: {
+        controls: true,
+        wheel: true,
+        pinch: true
+    },
+    trashcan: true
+	});
+
     console.log("Blockly este activ!");
 
     window.runProgram = function() {
