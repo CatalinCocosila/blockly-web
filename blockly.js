@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var statements = Blockly.JavaScript.statementToCode(block, 'DO');
 
         var commands = statements.split("\n")
-            .map(cmd => cmd.replace("// ", "").trim())
+            .map(cmd => cmd.replace(/^\s*\/\/\s?/, "").trim())
             .filter(cmd => cmd !== "")
             .join("\n");
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_forward'] = function(block) {
-        return 'window.sendCommand("UP");\n';
+        return '// window.sendCommand("UP");\n';
     };
 
     Blockly.Blocks['move_backward'] = {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['move_backward'] = function(block) {
-        return 'window.sendCommand("DOWN");\n';
+        return '// window.sendCommand("DOWN");\n';
     };
 
     Blockly.Blocks['turn_left'] = {
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_left'] = function(block) {
-        return 'window.sendCommand("LEFT");\n';
+        return '// window.sendCommand("LEFT");\n';
     };
 
     Blockly.Blocks['turn_right'] = {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
     Blockly.JavaScript.forBlock['turn_right'] = function(block) {
-        return 'window.sendCommand("RIGHT");\n';
+        return '// window.sendCommand("RIGHT");\n';
     };
 
     Blockly.Blocks['repeat_n'] = {
